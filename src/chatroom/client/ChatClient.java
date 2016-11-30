@@ -19,11 +19,11 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		this.username = username;
 	}
 
-	private boolean lookupServer(String host, int port)
+	private boolean lookupServer(String host)
 	{
 		try
 		{
-			Registry registry = LocateRegistry.getRegistry(host, port);
+			Registry registry = LocateRegistry.getRegistry(host);
 			server = (IServer) registry.lookup(IServer.SERVER_KEY);
 			return true;
 		} catch (Exception e)
@@ -73,15 +73,20 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 
 	public static void main(String[] args) throws RemoteException
 	{
-		// TODO args
-		String username = "alice";
-		String host = null;
-		int port = 0;
+		if (args.length < 1 || args.length > 2)
+		{
+			System.err.println("Usage: <username> [host ( = localhost)]");
+			System.exit(1);
+			return;
+		}
+
+		String username = args[0];
+		String host = args.length == 2 ? args[1] : null;
 
 		ChatClient chatClient = new ChatClient(username);
 
 		boolean success = false;
-		if (chatClient.lookupServer(host, port))
+		if (chatClient.lookupServer(host))
 		{
 			success = chatClient.start();
 		}
