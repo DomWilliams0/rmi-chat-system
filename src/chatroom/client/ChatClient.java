@@ -1,5 +1,8 @@
 package chatroom.client;
 
+import chatroom.client.ui.ConsoleInterface;
+import chatroom.client.ui.IInterface;
+import chatroom.client.ui.AnnoyingPopupInterface;
 import chatroom.protocol.IClient;
 import chatroom.protocol.IServer;
 
@@ -13,10 +16,13 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 	private IServer server;
 	private String username;
 
-	public ChatClient(String username) throws RemoteException
+	private IInterface ui;
+
+	public ChatClient(String username, IInterface ui) throws RemoteException
 	{
 		super();
 		this.username = username;
+		this.ui = ui;
 	}
 
 	private boolean lookupServer(String host)
@@ -83,7 +89,8 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		String username = args[0];
 		String host = args.length == 2 ? args[1] : null;
 
-		ChatClient chatClient = new ChatClient(username);
+		IInterface ui = new ConsoleInterface(System.out);
+		ChatClient chatClient = new ChatClient(username, ui);
 
 		boolean success = false;
 		if (chatClient.lookupServer(host))
@@ -97,7 +104,7 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 	@Override
 	public void receiveMessageFromServer(String message) throws RemoteException
 	{
-		System.out.println("message = " + message);
+		ui.displayMessage(message);
 	}
 
 	@Override
