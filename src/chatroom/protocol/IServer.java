@@ -7,7 +7,7 @@ public interface IServer extends Remote
 {
 	String SERVER_KEY = "ChatroomServer";
 
-	void sendMessage(String message) throws RemoteException;
+	void sendMessage(Message message) throws RemoteException;
 
 	String join(IClient client) throws RemoteException;
 

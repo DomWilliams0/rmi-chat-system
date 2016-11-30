@@ -1,5 +1,7 @@
 package chatroom.client.ui;
 
+import chatroom.protocol.Message;
+
 import java.io.PrintStream;
 
 public class ConsoleInterface implements IInterface
@@ -12,8 +14,8 @@ public class ConsoleInterface implements IInterface
 	}
 
 	@Override
-	public void displayMessage(String message)
+	public void displayMessage(Message message)
 	{
-		stream.printf("[UNKNOWN] %s\n", message);
+		stream.printf("[%s] %s\n", message.getSender(), message.getMessage());
 	}
 }

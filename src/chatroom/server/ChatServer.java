@@ -2,11 +2,10 @@ package chatroom.server;
 
 import chatroom.protocol.IClient;
 import chatroom.protocol.IServer;
+import chatroom.protocol.Message;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class ChatServer extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
-	public void sendMessage(String message) throws RemoteException
+	public void sendMessage(Message message) throws RemoteException
 	{
 		for (IClient client : clients.values())
 			client.receiveMessageFromServer(message);

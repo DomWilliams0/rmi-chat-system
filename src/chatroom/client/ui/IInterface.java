@@ -1,9 +1,10 @@
 package chatroom.client.ui;
 
+import chatroom.protocol.Message;
+
 public interface IInterface
 {
-	void displayMessage(String message);
+	void displayMessage(Message message);
 
-	// TODO message attribution
 	// TODO user list
 }

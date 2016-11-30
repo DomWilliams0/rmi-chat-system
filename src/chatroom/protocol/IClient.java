@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 
 public interface IClient extends Remote
 {
-	void receiveMessageFromServer(String message) throws RemoteException;
+	void receiveMessageFromServer(Message message) throws RemoteException;
 
 	String getUsername() throws RemoteException;
 }

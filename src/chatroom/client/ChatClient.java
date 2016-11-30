@@ -2,9 +2,9 @@ package chatroom.client;
 
 import chatroom.client.ui.ConsoleInterface;
 import chatroom.client.ui.IInterface;
-import chatroom.client.ui.AnnoyingPopupInterface;
 import chatroom.protocol.IClient;
 import chatroom.protocol.IServer;
+import chatroom.protocol.Message;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -55,7 +55,7 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 
 			// send test message
 			System.out.println("Sending test message");
-			server.sendMessage("hello!");
+			sendMessage("hello from " + username);
 			try
 			{
 				Thread.sleep(1000);
@@ -74,6 +74,11 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		}
 
 		return true;
+	}
+
+	private void sendMessage(String message) throws RemoteException
+	{
+		server.sendMessage(new Message(username, message));
 	}
 
 
@@ -102,7 +107,7 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 	}
 
 	@Override
-	public void receiveMessageFromServer(String message) throws RemoteException
+	public void receiveMessageFromServer(Message message) throws RemoteException
 	{
 		ui.displayMessage(message);
 	}
