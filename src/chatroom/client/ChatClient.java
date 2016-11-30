@@ -71,7 +71,8 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 	{
 		try
 		{
-			server.sendMessage(new Message(username, message));
+			if (!message.isEmpty())
+				server.sendMessage(new Message(username, message));
 		} catch (RemoteException e)
 		{
 			e.printStackTrace();
