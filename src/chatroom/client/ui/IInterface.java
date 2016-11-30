@@ -1,8 +1,7 @@
 package chatroom.client.ui;
 
 import chatroom.client.ChatClient;
-import chatroom.protocol.IServer;
-import chatroom.protocol.Message;
+import chatroom.protocol.message.Message;
 
 public interface IInterface
 {
@@ -12,18 +11,6 @@ public interface IInterface
 	void start(ChatClient client);
 
 	void displayMessage(Message message);
-
-	void displayBroadcast(String message);
-
-	static String formatMessage(Message message)
-	{
-		return String.format("[%s] %s\n", message.getSender(), message.getMessage());
-	}
-
-	static String formatBroadcast(String message)
-	{
-		return String.format("The server says: %s\n", message);
-	}
 
 	// TODO user list
 }

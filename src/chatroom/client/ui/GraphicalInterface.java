@@ -1,11 +1,9 @@
 package chatroom.client.ui;
 
 import chatroom.client.ChatClient;
-import chatroom.protocol.Message;
+import chatroom.protocol.message.Message;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -104,15 +102,7 @@ public class GraphicalInterface implements IInterface
 	public void displayMessage(Message message)
 	{
 		SwingUtilities.invokeLater(() ->
-			history.append(IInterface.formatMessage(message))
-		);
-	}
-
-	@Override
-	public void displayBroadcast(String message)
-	{
-		SwingUtilities.invokeLater(() ->
-			history.append(IInterface.formatBroadcast(message))
+			history.append(message.format())
 		);
 	}
 }

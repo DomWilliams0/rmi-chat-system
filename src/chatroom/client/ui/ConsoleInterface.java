@@ -1,7 +1,7 @@
 package chatroom.client.ui;
 
 import chatroom.client.ChatClient;
-import chatroom.protocol.Message;
+import chatroom.protocol.message.Message;
 
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -19,14 +19,7 @@ public class ConsoleInterface implements IInterface
 	public void displayMessage(Message message)
 	{
 		stream.flush();
-		stream.print(IInterface.formatMessage(message));
-	}
-
-	@Override
-	public void displayBroadcast(String message)
-	{
-		stream.flush();
-		stream.print(IInterface.formatBroadcast(message));
+		stream.print(message.format());
 	}
 
 	@Override

@@ -1,11 +1,12 @@
 package chatroom.client;
 
-import chatroom.client.ui.GraphicalInterface;
 import chatroom.client.ui.ConsoleInterface;
+import chatroom.client.ui.GraphicalInterface;
 import chatroom.client.ui.IInterface;
 import chatroom.protocol.IClient;
 import chatroom.protocol.IServer;
-import chatroom.protocol.Message;
+import chatroom.protocol.message.ChatMessage;
+import chatroom.protocol.message.Message;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -72,7 +73,7 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		try
 		{
 			if (!message.isEmpty())
-				server.sendMessage(new Message(username, message));
+				server.sendMessage(new ChatMessage(username, message));
 		} catch (RemoteException e)
 		{
 			e.printStackTrace();
@@ -120,12 +121,6 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 	public void receiveMessageFromServer(Message message) throws RemoteException
 	{
 		ui.displayMessage(message);
-	}
-
-	@Override
-	public void receiveBroadcastFromServer(String message) throws RemoteException
-	{
-		ui.displayBroadcast(message);
 	}
 
 	@Override
