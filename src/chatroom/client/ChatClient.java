@@ -54,20 +54,10 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 				return false;
 			}
 
-			// send test message
-			System.out.println("Sending test message");
-			sendMessage("hello from " + username);
-			try
-			{
-				Thread.sleep(1000);
-			} catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
+			// disconnect on quit
+			Runtime.getRuntime().addShutdownHook(new Thread(this::quit));
 
-			// leave
-			System.out.println("Disconnecting");
-			server.quit(this);
+			ui.start(this);
 
 		} catch (RemoteException e)
 		{
@@ -77,11 +67,27 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		return true;
 	}
 
-	private void sendMessage(String message) throws RemoteException
+	public void sendMessage(String message)
 	{
-		server.sendMessage(new Message(username, message));
+		try
+		{
+			server.sendMessage(new Message(username, message));
+		} catch (RemoteException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
+	public void quit()
+	{
+		try
+		{
+			server.quit(this);
+		} catch (RemoteException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) throws RemoteException
 	{
@@ -97,10 +103,10 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		String host = args.length == 3 ? args[2] : null;
 
 		IInterface ui = gui ? new AnnoyingPopupInterface() : new ConsoleInterface(System.out);
-		
 		ChatClient chatClient = new ChatClient(username, ui);
 
 		boolean success = false;
+
 		if (chatClient.lookupServer(host))
 		{
 			success = chatClient.start();
