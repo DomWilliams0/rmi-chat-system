@@ -15,5 +15,15 @@ public interface IInterface
 
 	void displayBroadcast(String message);
 
+	static String formatMessage(Message message)
+	{
+		return String.format("[%s] %s\n", message.getSender(), message.getMessage());
+	}
+
+	static String formatBroadcast(String message)
+	{
+		return String.format("The server says: %s\n", message);
+	}
+
 	// TODO user list
 }

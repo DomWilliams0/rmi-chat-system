@@ -19,14 +19,14 @@ public class ConsoleInterface implements IInterface
 	public void displayMessage(Message message)
 	{
 		stream.flush();
-		stream.printf("[%s] %s\n", message.getSender(), message.getMessage());
+		stream.print(IInterface.formatMessage(message));
 	}
 
 	@Override
 	public void displayBroadcast(String message)
 	{
 		stream.flush();
-		stream.printf("The server says: %s\n", message);
+		stream.print(IInterface.formatBroadcast(message));
 	}
 
 	@Override

@@ -104,7 +104,7 @@ public class GraphicalInterface implements IInterface
 	public void displayMessage(Message message)
 	{
 		SwingUtilities.invokeLater(() ->
-			history.append(String.format("[%s] %s\n", message.getSender(), message.getMessage()))
+			history.append(IInterface.formatMessage(message))
 		);
 	}
 
@@ -112,7 +112,7 @@ public class GraphicalInterface implements IInterface
 	public void displayBroadcast(String message)
 	{
 		SwingUtilities.invokeLater(() ->
-			history.append(String.format("The server says: %s\n", message))
+			history.append(IInterface.formatBroadcast(message))
 		);
 	}
 }
