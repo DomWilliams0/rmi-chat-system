@@ -122,6 +122,12 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 	}
 
 	@Override
+	public void receiveBroadcastFromServer(String message) throws RemoteException
+	{
+		ui.displayBroadcast(message);
+	}
+
+	@Override
 	public String getUsername() throws RemoteException
 	{
 		return username;

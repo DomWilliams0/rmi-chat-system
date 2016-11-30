@@ -7,5 +7,7 @@ public interface IClient extends Remote
 {
 	void receiveMessageFromServer(Message message) throws RemoteException;
 
+	void receiveBroadcastFromServer(String message) throws RemoteException;
+
 	String getUsername() throws RemoteException;
 }

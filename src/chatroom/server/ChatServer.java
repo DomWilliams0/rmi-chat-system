@@ -28,11 +28,20 @@ public class ChatServer extends UnicastRemoteObject implements IServer
 	}
 
 	@Override
+	public void broadcastMessage(String message) throws RemoteException
+	{
+		for (IClient client : clients.values())
+			client.receiveBroadcastFromServer(message);
+	}
+
+	@Override
 	public String join(IClient client) throws RemoteException
 	{
 		String username = client.getUsername();
 		if (clients.containsKey(username))
 			return "There is already a client connected with that username";
+
+		broadcastMessage(username + " joined");
 
 		clients.put(username, client);
 		System.out.printf("Client '%s' joined\n", username);
@@ -46,7 +55,10 @@ public class ChatServer extends UnicastRemoteObject implements IServer
 		String username = client.getUsername();
 
 		if (clients.remove(username) != null)
-			System.out.printf("Client '%s' quit\n", client.getUsername());
+		{
+			System.out.printf("Client '%s' quit\n", username);
+			broadcastMessage(username + " quit");
+		}
 	}
 
 	private void register()

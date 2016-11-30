@@ -23,6 +23,13 @@ public class ConsoleInterface implements IInterface
 	}
 
 	@Override
+	public void displayBroadcast(String message)
+	{
+		stream.flush();
+		stream.printf("The server says: %s\n", message);
+	}
+
+	@Override
 	public void start(ChatClient client)
 	{
 		Scanner scanner = new Scanner(System.in);

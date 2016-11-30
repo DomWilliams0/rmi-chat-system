@@ -65,7 +65,15 @@ public class AnnoyingPopupInterface implements IInterface
 	public void displayMessage(Message message)
 	{
 		SwingUtilities.invokeLater(() ->
-			JOptionPane.showMessageDialog(frame, message.getMessage(),
-				"Message from " + message.getSender(), JOptionPane.INFORMATION_MESSAGE));
+			JOptionPane.showMessageDialog(frame, message.getSender() + ": " + message.getMessage(),
+				"New Message", JOptionPane.INFORMATION_MESSAGE));
+	}
+
+	@Override
+	public void displayBroadcast(String message)
+	{
+		SwingUtilities.invokeLater(() ->
+			JOptionPane.showMessageDialog(frame, "The server says: " + message,
+				"Broadcast", JOptionPane.INFORMATION_MESSAGE));
 	}
 }

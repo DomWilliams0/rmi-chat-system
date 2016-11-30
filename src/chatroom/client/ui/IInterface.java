@@ -13,5 +13,7 @@ public interface IInterface
 
 	void displayMessage(Message message);
 
+	void displayBroadcast(String message);
+
 	// TODO user list
 }
