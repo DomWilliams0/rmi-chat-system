@@ -1,6 +1,6 @@
 package chatroom.client;
 
-import chatroom.client.ui.AnnoyingPopupInterface;
+import chatroom.client.ui.GraphicalInterface;
 import chatroom.client.ui.ConsoleInterface;
 import chatroom.client.ui.IInterface;
 import chatroom.protocol.IClient;
@@ -102,7 +102,7 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		boolean gui = args[1].equals("gui");
 		String host = args.length == 3 ? args[2] : null;
 
-		IInterface ui = gui ? new AnnoyingPopupInterface() : new ConsoleInterface(System.out);
+		IInterface ui = gui ? new GraphicalInterface() : new ConsoleInterface(System.out);
 		ChatClient chatClient = new ChatClient(username, ui);
 
 		boolean success = false;
