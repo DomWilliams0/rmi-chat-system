@@ -10,11 +10,19 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 public class GraphicalInterface implements IInterface
 {
 	private JDialog frame;
 	private JTextArea history;
+
+	private final java.util.List<Message> buffer;
+
+	public GraphicalInterface()
+	{
+		buffer = new ArrayList<>();
+	}
 
 	@Override
 	public void start(ChatClient client)
@@ -85,6 +93,10 @@ public class GraphicalInterface implements IInterface
 					}
 				});
 
+				// add queued messages in buffer
+				buffer.forEach(this::reallyDisplayMessage);
+				buffer.clear();
+
 				frame = new JDialog();
 				frame.setModal(true);
 				frame.setContentPane(panel);
@@ -100,6 +112,14 @@ public class GraphicalInterface implements IInterface
 
 	@Override
 	public void displayMessage(Message message)
+	{
+		if (history == null)
+			buffer.add(message);
+		else
+			reallyDisplayMessage(message);
+	}
+
+	private void reallyDisplayMessage(Message message)
 	{
 		SwingUtilities.invokeLater(() ->
 			history.append(message.format())
