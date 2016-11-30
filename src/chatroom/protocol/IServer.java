@@ -9,7 +9,7 @@ public interface IServer extends Remote
 
 	void sendMessage(String message) throws RemoteException;
 
-	boolean join(IClient client) throws RemoteException;
+	String join(IClient client) throws RemoteException;
 
 	void quit(IClient client) throws RemoteException;
 }

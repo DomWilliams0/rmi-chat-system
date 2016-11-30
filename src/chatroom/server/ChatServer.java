@@ -3,43 +3,58 @@ package chatroom.server;
 import chatroom.protocol.IClient;
 import chatroom.protocol.IServer;
 
-import java.rmi.AlreadyBoundException;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ChatServer implements IServer
+public class ChatServer extends UnicastRemoteObject implements IServer
 {
+	private Map<String, IClient> clients;
+
+	public ChatServer() throws RemoteException
+	{
+		super();
+		clients = new HashMap<>();
+	}
 
 	@Override
 	public void sendMessage(String message) throws RemoteException
 	{
-		System.out.printf("Sending message '%s'\n", message);
+		for (IClient client : clients.values())
+			client.receiveMessageFromServer(message);
 	}
 
 	@Override
-	public boolean join(IClient client) throws RemoteException
+	public String join(IClient client) throws RemoteException
 	{
-		System.out.printf("Client '%s' joined\n", client.getUsername());
-		return true;
+		String username = client.getUsername();
+		if (clients.containsKey(username))
+			return "There is already a client connected with that username";
+
+		clients.put(username, client);
+		System.out.printf("Client '%s' joined\n", username);
+
+		return null;
 	}
 
 	@Override
 	public void quit(IClient client) throws RemoteException
 	{
-		System.out.printf("Client '%s' quit\n", client.getUsername());
+		String username = client.getUsername();
+
+		if (clients.remove(username) != null)
+			System.out.printf("Client '%s' quit\n", client.getUsername());
 	}
 
 	private void register()
 	{
 		try
 		{
-			IServer stub = (IServer) UnicastRemoteObject.exportObject(this, 0);
-
-			Registry registry = LocateRegistry.getRegistry();
-			registry.bind(IServer.SERVER_KEY, stub);
-
+			Naming.rebind(IServer.SERVER_KEY, this);
 			System.out.println("Server started");
 		} catch (Exception e)
 		{
@@ -50,8 +65,14 @@ public class ChatServer implements IServer
 
 	public static void main(String[] args)
 	{
-		ChatServer server = new ChatServer();
-		server.register();
+		try
+		{
+			ChatServer server = new ChatServer();
+			server.register();
+		} catch (RemoteException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 }

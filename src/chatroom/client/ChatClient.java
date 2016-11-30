@@ -3,18 +3,19 @@ package chatroom.client;
 import chatroom.protocol.IClient;
 import chatroom.protocol.IServer;
 
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
-public class ChatClient implements IClient, Serializable
+public class ChatClient extends UnicastRemoteObject implements IClient
 {
 	private IServer server;
 	private String username;
 
-	public ChatClient(String username)
+	public ChatClient(String username) throws RemoteException
 	{
+		super();
 		this.username = username;
 	}
 
@@ -39,12 +40,23 @@ public class ChatClient implements IClient, Serializable
 		{
 			// join server
 			System.out.println("Joining server");
-			if (!server.join(this))
+			String error;
+			if ((error = server.join(this)) != null)
+			{
+				System.err.printf("Failed to connect to server: %s\n", error);
 				return false;
+			}
 
 			// send test message
 			System.out.println("Sending test message");
 			server.sendMessage("hello!");
+			try
+			{
+				Thread.sleep(1000);
+			} catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 
 			// leave
 			System.out.println("Disconnecting");
@@ -59,7 +71,7 @@ public class ChatClient implements IClient, Serializable
 	}
 
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws RemoteException
 	{
 		// TODO args
 		String username = "alice";
