@@ -1,5 +1,6 @@
 package chatroom.client;
 
+import chatroom.client.ui.AnnoyingPopupInterface;
 import chatroom.client.ui.ConsoleInterface;
 import chatroom.client.ui.IInterface;
 import chatroom.protocol.IClient;
@@ -84,17 +85,19 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 
 	public static void main(String[] args) throws RemoteException
 	{
-		if (args.length < 1 || args.length > 2)
+		if (args.length < 2 || args.length > 3)
 		{
-			System.err.println("Usage: <username> [host ( = localhost)]");
+			System.err.println("Usage: <username> <gui|console> [host ( = localhost)]");
 			System.exit(1);
 			return;
 		}
 
 		String username = args[0];
-		String host = args.length == 2 ? args[1] : null;
+		boolean gui = args[1].equals("gui");
+		String host = args.length == 3 ? args[2] : null;
 
-		IInterface ui = new ConsoleInterface(System.out);
+		IInterface ui = gui ? new AnnoyingPopupInterface() : new ConsoleInterface(System.out);
+		
 		ChatClient chatClient = new ChatClient(username, ui);
 
 		boolean success = false;
