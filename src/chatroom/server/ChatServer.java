@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Server-side implementation of IServer
+ */
 public class ChatServer extends UnicastRemoteObject implements IServer
 {
 	private final Map<String, IClient> clients;
@@ -40,6 +43,11 @@ public class ChatServer extends UnicastRemoteObject implements IServer
 		addMessageToHistory(message);
 	}
 
+	/**
+	 * Broadcasts the given string to all clients
+	 *
+	 * @param message The string to broadcast
+	 */
 	private void broadcastMessage(String message) throws RemoteException
 	{
 		sendMessage(new BroadcastMessage(message));
@@ -76,6 +84,9 @@ public class ChatServer extends UnicastRemoteObject implements IServer
 		}
 	}
 
+	/**
+	 * Registers this object in the RMI registry
+	 */
 	private void register()
 	{
 		try
@@ -89,6 +100,12 @@ public class ChatServer extends UnicastRemoteObject implements IServer
 		}
 	}
 
+	/**
+	 * Adds the given message to the chat history
+	 * History will be saved once the buffer is filled
+	 *
+	 * @param message The message to save
+	 */
 	private void addMessageToHistory(Message message)
 	{
 		messageHistory.add(message);
@@ -97,6 +114,9 @@ public class ChatServer extends UnicastRemoteObject implements IServer
 			saveChatHistory();
 	}
 
+	/**
+	 * Saves the chat history buffer to file
+	 */
 	private void saveChatHistory()
 	{
 		try
@@ -112,6 +132,9 @@ public class ChatServer extends UnicastRemoteObject implements IServer
 		}
 	}
 
+	/**
+	 * Loads the chat history from file
+	 */
 	private void loadChatHistory()
 	{
 		try

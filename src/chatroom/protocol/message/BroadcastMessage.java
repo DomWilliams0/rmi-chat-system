@@ -1,7 +1,13 @@
 package chatroom.protocol.message;
 
+/**
+ * Represents a message from the server
+ */
 public class BroadcastMessage extends Message
 {
+	/**
+	 * @param message The message's content
+	 */
 	public BroadcastMessage(String message)
 	{
 		super(message);

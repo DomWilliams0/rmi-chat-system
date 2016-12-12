@@ -13,6 +13,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * Client-side implementation of IClient
+ */
 public class ChatClient extends UnicastRemoteObject implements IClient
 {
 	private IServer server;
@@ -20,6 +23,10 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 
 	private IInterface ui;
 
+	/**
+	 * @param username The client's username
+	 * @param ui       The user interface
+	 */
 	public ChatClient(String username, IInterface ui) throws RemoteException
 	{
 		super();
@@ -27,6 +34,12 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		this.ui = ui;
 	}
 
+	/**
+	 * Attempts to lookup the server in the registry
+	 *
+	 * @param host The host to look up
+	 * @return If the lookup was successful
+	 */
 	private boolean lookupServer(String host)
 	{
 		try
@@ -42,6 +55,11 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		}
 	}
 
+	/**
+	 * Connects to the server, and run the user interface
+	 *
+	 * @return If connecting to the server was successful
+	 */
 	private boolean start()
 	{
 		try
@@ -68,6 +86,11 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		return true;
 	}
 
+	/**
+	 * Sends the given string to the server from the client
+	 *
+	 * @param message The message content
+	 */
 	public void sendMessage(String message)
 	{
 		try
@@ -80,6 +103,9 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		}
 	}
 
+	/**
+	 * Disconnect from the server
+	 */
 	public void quit()
 	{
 		try
@@ -104,7 +130,7 @@ public class ChatClient extends UnicastRemoteObject implements IClient
 		boolean gui = args[1].equals("gui");
 		String host = args.length == 3 ? args[2] : null;
 
-		IInterface ui = gui ? new GraphicalInterface() : new ConsoleInterface(System.out);
+		IInterface ui = gui ? new GraphicalInterface() : new ConsoleInterface(System.out, System.in);
 		ChatClient chatClient = new ChatClient(username, ui);
 
 		boolean success = false;

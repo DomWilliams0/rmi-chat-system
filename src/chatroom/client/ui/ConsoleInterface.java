@@ -3,29 +3,39 @@ package chatroom.client.ui;
 import chatroom.client.ChatClient;
 import chatroom.protocol.message.Message;
 
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
+/**
+ * Represents a simple command line UI
+ */
 public class ConsoleInterface implements IInterface
 {
-	private final PrintStream stream;
+	private final PrintStream out;
+	private final InputStream in;
 
-	public ConsoleInterface(PrintStream stream)
+	/**
+	 * @param out The stream to write output to
+	 * @param in  The stream to read input from
+	 */
+	public ConsoleInterface(PrintStream out, InputStream in)
 	{
-		this.stream = stream;
+		this.out = out;
+		this.in = in;
 	}
 
 	@Override
 	public void displayMessage(Message message)
 	{
-		stream.flush();
-		stream.print(message.format());
+		out.flush();
+		out.print(message.format());
 	}
 
 	@Override
 	public void start(ChatClient client)
 	{
-		Scanner scanner = new Scanner(System.in);
+		Scanner scanner = new Scanner(in);
 		System.out.println("Enter a message to send, or /quit to leave");
 		while (true)
 		{
